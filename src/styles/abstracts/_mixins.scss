@@ -1,3 +1,33 @@
 // ======================================================
 // Abstracts :: Mixins
 // ======================================================
+
+// Auto get invert value when turn to dark mode
+// ======================================================
+// Example:
+//
+// .class {
+//   @include setInvert('color', 'dark');
+// }
+@mixin setInvert($property, $value) {
+  #{$property}: color($value);
+
+  .dark & {
+    #{$property}: get-invert-value($value);
+  }
+}
+
+// Style for dark mode
+// ======================================================
+// Example:
+//
+// .class {
+//   @include dark {
+//     color: white;
+//   }
+// }
+@mixin dark {
+  .dark & {
+    @content;
+  }
+}

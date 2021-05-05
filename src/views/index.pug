@@ -1,14 +1,33 @@
 extends layouts/default
 include helpers/mixins
+include ../blocks/components/button/button
 
 block variables
   - const title = "Index"
 
 block content
-  div.flex.justify-center.items-center.flex-col(class='min-h-screen w-full dark:bg-black dark:text-white')
-    h1.font-semibold.text-4xl Toggle Dark/Light
-    button.js-toggle-dark-mode.btn Toggle Dark Mode
-    .test(class="absolute w-[400px] h-[50vh] top-[-125px] right-[62px] md:top-[100px] md:right-[20%] bg-indigo-500 dark:bg-indigo-50")
+  .p-styleguide
+    .l-sidebar
+      button.js-toggle-dark-mode.btn.btn-primary.mb-4 Toggle Dark Mode
+      a.t-link(href="#styleguide-button") Button
+    .l-content
+      .l-banner
+        h1 Toggle Dark/Light
+        button.js-toggle-dark-mode.btn.btn-primary Toggle Dark Mode
+      .l-section
+        h3#styleguide-button Buttons
+        .l-block
+          - var listBtn = ['primary','secondary','success','info','warning', 'danger', 'light', 'dark']
+          each i in listBtn
+            button(class=`btn btn-${i}` type="button")
+              span=i
+        .l-block.items-center
+          button.btn.btn-lg.btn-primary
+              span Button Lg
+          button.btn.btn-primary
+              span Button Default
+          button.btn.btn-sm.btn-primary
+              span Button Sm
 block scripts
   script(src="js/vendor/test.js")
   script(src="js/main.js")

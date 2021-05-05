@@ -1,3 +1,35 @@
 // ======================================================
 // Abstracts :: Variables
 // ======================================================
+
+// Variables should follow the `$component-state-property-size` formula for
+// consistent naming. Ex: $nav-link-disabled-color and $modal-content-box-shadow-xs.
+
+// COLOR SYSTEM
+
+// Themes colors
+$theme-colors: (
+  'primary': color('primary'),
+  'secondary': color('secondary'),
+  'success': color('success'),
+  'info': color('info'),
+  'warning': color('warning'),
+  'danger': color('danger'),
+  'light': color('light'),
+  'dark': color('dark'),
+);
+
+$light: color('light');
+$dark: color('dark');
+
+// Config colors for dark & light mode
+$color-contrast-light: $light;
+$color-contrast-dark: $dark;
+
+// Constrast ratio use for caculate color constrast
+$min-contrast-ratio: 1.5 !default;
+
+$invertValue: (
+  'dark': $light,
+  'light': $dark,
+);

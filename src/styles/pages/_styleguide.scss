@@ -1,0 +1,54 @@
+.p-styleguide {
+  @apply flex;
+
+  @include dark {
+    @apply bg-gray-900;
+  }
+
+  .l-sidebar {
+    width: 300px;
+    @apply fixed top-0 left-0 min-h-screen overflow-y-auto bg-gray-100;
+    @apply py-16 px-8;
+
+    @include dark {
+      @apply bg-gray-800;
+    }
+
+    .t-link {
+      @apply block mb-4;
+      @include setInvert('color', 'dark');
+    }
+  }
+
+  .l-content {
+    @apply flex-1;
+    padding-left: 300px;
+  }
+
+  .l-banner {
+    @apply flex justify-center items-center flex-col min-h-screen w-full;
+    @include setInvert('color', 'dark');
+
+    h1 {
+      @apply font-semibold text-4xl;
+    }
+  }
+
+  .l-section {
+    @apply p-16;
+
+    h3 {
+      @apply text-2xl pb-4 block mb-8;
+      border-bottom: 1px solid rgba(color('primary'), 0.1);
+
+      @include dark {
+        border-bottom-color: rgba(color('white'), 0.3);
+        @apply text-light;
+      }
+    }
+  }
+
+  .l-block {
+    @apply flex flex-wrap gap-4 mb-8;
+  }
+}

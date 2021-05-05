@@ -1,0 +1,250 @@
+/*
+  Dựa trên bootstrap's ideal button và các loại form control như input,
+  select, textarea... sẽ share các thuộc tính như font-size,
+  line-height, padding...Với mỗi size button và form-control
+  sẽ share các giá trị tương ứng.
+
+  Hiện tại sẽ get giá trị từ tailwind_variables ra để làm button trước.
+
+  Step 1: Common Style
+
+  Step 2: Button đơn giản
+    Có thể generate từ themes color đáp ứng:
+      - Hover, Focus, Active background, border-color
+      - Condition text-color dựa vào background ở state hiện tại (active, hover, focus)
+    Có thể config được:
+      - Box shadow
+      - Border radius (share)
+      - Padding (all sizes) (share)
+      - Line Height (share)
+      - Font Size (share)
+      - Transition
+      - Disabled Opacity
+      - Text Color (share)
+*/
+
+// Variables Config
+$btn-font-weight: get($fontWeight, 'light');
+$btn-line-height: get($lineHeight, 'normal');
+$btn-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+  border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !default;
+$btn-disabled-opacity: 0.65 !default;
+
+$btn-font-size: get($fontSize, 'base');
+$btn-font-size-sm: get($fontSize, 'sm');
+$btn-font-size-lg: get($fontSize, 'lg');
+
+$btn-padding-y: get($padding, '1.5');
+$btn-padding-x: get($padding, '3');
+$btn-padding-y-sm: get($padding, '1');
+$btn-padding-x-sm: get($padding, '2');
+$btn-padding-y-lg: get($padding, '2');
+$btn-padding-x-lg: get($padding, '4');
+
+$btn-border-radius: get($borderRadius, 'DEFAULT');
+$btn-border-radius-sm: get($borderRadius, 'sm');
+$btn-border-radius-lg: get($borderRadius, 'lg');
+
+$btn-border-width: 1px !default;
+
+$btn-text-color: color('dark');
+
+// MIXIN SIZE
+@mixin button-size($padding-y, $padding-x, $font-size, $border-radius) {
+  padding: $padding-y $padding-x;
+  font-size: $font-size;
+  border-radius: $border-radius;
+}
+
+// COMMON STYLE
+
+.btn {
+  @apply inline-flex justify-center no-underline items-center;
+  @apply cursor-pointer select-none bg-transparent whitespace-nowrap;
+  @apply border-solid border-transparent;
+  border-width: $btn-border-width;
+  font-weight: $btn-font-weight;
+  line-height: $btn-line-height;
+  color: $btn-text-color;
+  transition: $btn-transition;
+  @include button-size(
+    $btn-padding-y,
+    $btn-padding-x,
+    $btn-font-size,
+    $btn-border-radius
+  );
+
+  &:hover {
+    color: $btn-text-color;
+    @apply no-underline;
+  }
+
+  &:focus {
+    @apply outline-none;
+  }
+
+  &:disabled,
+  &.disabled,
+  fieldset:disabled & {
+    @apply pointer-events-none;
+    opacity: $btn-disabled-opacity;
+  }
+}
+
+// SIZE
+/* stylelint-disable no-duplicate-selectors */
+
+.btn {
+  &.btn-lg {
+    @include button-size(
+      $btn-padding-y-lg,
+      $btn-padding-x-lg,
+      $btn-font-size-lg,
+      $btn-border-radius-lg
+    );
+  }
+
+  &.btn-sm {
+    @include button-size(
+      $btn-padding-y-sm,
+      $btn-padding-x-sm,
+      $btn-font-size-sm,
+      $btn-border-radius-sm
+    );
+  }
+}
+
+@mixin button-variant(
+  $background,
+  $border,
+  $color,
+  $box-shadow,
+  $hover-background,
+  $hover-border,
+  $hover-color,
+  $active-background,
+  $active-border,
+  $active-color
+) {
+  // Initial state
+  @if ($color != null) {
+    color: $color;
+  }
+
+  @if ($background != null) {
+    background-color: $background;
+  }
+
+  @if ($border != null) {
+    border-color: $border;
+  }
+
+  // Hover & focus state
+  @if (
+    $hover-color != null or $hover-border != null or $hover-background != null
+  ) {
+    &:hover:not(:disabled):not(.disabled):not(.active):not(:active),
+    &:focus,
+    &.focus {
+      @if ($hover-color != null) {
+        color: $hover-color;
+      }
+
+      @if ($hover-background != null) {
+        background-color: $hover-background;
+      }
+
+      @if ($hover-border != null) {
+        border-color: $hover-border;
+      }
+    }
+  }
+
+  // Disabled state
+  @if () {
+    &.disabled,
+    &:disabled {
+      @if ($color != null) {
+        color: $color;
+      }
+
+      @if ($background != null) {
+        background-color: $background;
+      }
+
+      @if ($border != null) {
+        border-color: $border;
+      }
+    }
+  }
+
+  // Active state
+  @if (
+    $active-color !=
+      null or
+      $active-border !=
+      null or
+      $active-background !=
+      null
+  ) {
+    &:not(:disabled):not(.disabled).active {
+      @if ($active-color != null) {
+        color: $active-color;
+      }
+
+      @if ($active-background != null) {
+        background-color: $active-background;
+      }
+
+      @if ($active-border != null) {
+        border-color: $active-border;
+      }
+    }
+  }
+
+  // Box shadow
+  @if ($box-shadow != null) {
+    box-shadow: $box-shadow;
+  }
+}
+
+@each $color, $value in $theme-colors {
+  .btn-#{$color} {
+    $btn-background: $value;
+    $btn-border: $value;
+    $btn-color: color-contrast($value);
+    $btn-box-shadow: null;
+    $hover-foregrounds: if(
+      $btn-color == $color-contrast-light,
+      shade-color($value, 15%),
+      tint-color($value, 15%)
+    );
+
+    $btn-hover-background: $hover-foregrounds;
+    $btn-hover-border: $hover-foregrounds;
+    $btn-hover-color: color-contrast($hover-foregrounds);
+
+    $active-foregrounds: if(
+      $btn-color == $color-contrast-light,
+      shade-color($value, 20%),
+      tint-color($value, 20%)
+    );
+
+    $btn-active-background: $active-foregrounds;
+    $btn-active-border: $active-foregrounds;
+    $btn-active-color: color-contrast($active-foregrounds);
+
+    @include button-variant(
+      $btn-background,
+      $btn-border,
+      $btn-color,
+      $btn-box-shadow,
+      $btn-hover-background,
+      $btn-hover-border,
+      $btn-hover-color,
+      $btn-active-background,
+      $btn-active-border,
+      $btn-active-color
+    );
+  }
+}
